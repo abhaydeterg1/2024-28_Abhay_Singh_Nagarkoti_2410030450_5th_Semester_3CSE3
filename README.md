@@ -32,7 +32,6 @@ A 12-week internship at CashCow Labs · IILM University, Greater Noida</p>
 - [The Problem](#the-problem)
 - [What the System Does](#what-the-system-does)
 - [Architecture](#architecture)
-- [The n8n Canvas](#the-n8n-canvas)
 - [The Seven Pipelines](#the-seven-pipelines)
 - [Technologies and Tools](#technologies-and-tools)
 - [Data Model](#data-model)
@@ -76,14 +75,6 @@ Given an Ideal Customer Profile defined as data, the system:
 The system is **not one long chain**. It is seven independent pipelines sharing one Airtable base. Each has its own trigger, reads the records ready for it, does its work, writes the result back, and sets a completion flag. No pipeline calls another directly.
 
 This is the single most important decision in the design, and the reason is practical. A lead passes through scraping, qualification, company research, competitor research, enrichment, analysis, drafting, sending and follow-up. Run as one chain, that is a workflow lasting several minutes per lead that fails completely if any one API call times out. Split into seven, a failure in the enrichment stage leaves every record that already passed qualification safely stored, and the enrichment stage simply picks them up on its next run.
-
-## The n8n Canvas
-
-![n8n workflow canvas](assets/n8n-canvas.png)
-
-The full workflow as it sits in the n8n editor. Each labelled region is a sticky note in the actual canvas, marking one stage of the pipeline. The layout, node positions and connections above are drawn directly from the coordinates in `leadgen_workflow.json`, so this is the real shape of the workflow rather than a redrawing of it.
-
-Node colours follow the service each one calls, which makes the density of the thing visible at a glance: the long horizontal runs of green are OpenAI model nodes feeding agents, the light blue clusters are Airtable reads and writes, and the orange blocks on the left of each region are the Apify scrapers that start a run.
 
 ## The Seven Pipelines
 
